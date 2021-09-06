@@ -1,10 +1,12 @@
 import React from "react";
-import Button from "./components/button";
+import Button from "./components/Button";
 import './index.css';
 
-function App() {
+function App(props) {
+
   return (
     <div className="App">
+      <Button />
     </div>
   );
 }
