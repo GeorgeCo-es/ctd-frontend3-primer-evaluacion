@@ -25,7 +25,6 @@ class App extends React.Component {
   componentDidMount() {
     console.log("Haciendo update");
     this.busquedaHistoria("");
-    // this.setState({ letra: "a" });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -33,9 +32,7 @@ class App extends React.Component {
       respuestas.push(this.state.letra.toUpperCase());
     }
   }
-  // preventDef(e){
-  //   e.preventDefaul
-  // }
+
   next = (r) => {
     console.log("Next de ejeucion");
     this.busquedaHistoria(r);
@@ -80,15 +77,7 @@ class App extends React.Component {
   };
 
   render() {
-    // console.log(
-    //   "Llegando al render " +
-    //     this.state.dato.id +
-    //     " y la historia es " +
-    //     this.state.dato.historia +
-    //     " "
-    // );
     console.log(this.state.dato);
-    // return this.state.respuestas.length=1?
     return this.state.i < 6 ? (
       <div className="layout">
         <Historia historia={this.state.dato.historia} />
@@ -103,8 +92,6 @@ class App extends React.Component {
         <div className="recordatorio">
           <Respuestas list={respuestas} letra={this.state.letra} />
         </div>
-
-        {/* <h1 className="historia">{this.state.i}</h1> */}
       </div>
     ) : (
       alert("Fin")
