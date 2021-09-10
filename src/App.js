@@ -6,102 +6,108 @@ import Opciones from "./components/Opciones";
 import Respuestas from "./components/Respuestas";
 
 let respuestas = [];
-
+//
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      i: 1,
+      i: 0,
       historia: null,
       opcionA: null,
       opcionB: null,
-      dato: data[i],
-      letra: null,
-      count: 0,
+      dato: data[0],
+      data: data,
+      letra: "",
     };
-  }
-  // componentWillMount(){
-  //   this.setState({i:0})
-  //     this.setState({dato:data[this.state.i]})
-  // }
-
-  componentWillMount() {
-    this.setState({ dato: data[this.state.i] });
-    this.handleHistory();
-    this.handleOptions();
-    console.log("1");
-    // this.setState({dato:data});
+    console.log("Construyendo la app");
   }
 
-  componentDidUpdate(prevState) {
-    respuestas.push(this.state.letra);
+  componentDidMount() {
+    console.log("Haciendo update");
+    this.busquedaHistoria("");
+    // this.setState({ letra: "a" });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.letra != "") {
+      respuestas.push(this.state.letra.toUpperCase());
+    }
+  }
   // preventDef(e){
   //   e.preventDefaul
   // }
-  next = () => {
-    this.setState({ dato: data[this.state.i] });
+  next = (r) => {
+    console.log("Next de ejeucion");
+    this.busquedaHistoria(r);
     this.handleHistory();
     this.handleOptions();
   };
   handleOptions = () => {
-    this.setState({ opcionA: this.state.dato.opciones.a });
-    this.setState({ opcionB: this.state.dato.opciones.b });
+    console.log("Configurando opciones");
+    this.setState({
+      opcionA: this.state.dato.opciones.a,
+      opcionB: this.state.dato.opciones.b,
+    });
   };
 
   handleAnswerA = () => {
-    this.setState({ opcion: this.state.opcionA });
-    this.setState({ letra: "A" });
-    this.putAnserws();
-    this.setState({ i: this.state.i + 1 });
+    this.setState({
+      letra: "a",
+    });
     console.log("Seleccionado opcion A");
-    this.setState({ count: this.state.count + 1 });
-    this.next();
+    this.next("a");
   };
 
   handleAnswerB = () => {
-    this.setState({ opcion: this.state.opcionB });
-    this.setState({ letra: "B" });
-    this.putAnserws();
-    this.setState({ i: this.state.i + 2 });
+    this.setState({
+      letra: "b",
+    });
     console.log("Seleccionado opcion B");
-    this.setState({ count: this.state.count + 1 });
-    this.next();
+    this.next("b");
   };
 
   handleHistory = () => {
     this.setState({ historia: this.state.dato.historia });
   };
 
-  busquedaHistoria = () => {};
-
-  putAnserws = () => {
-    let opcion = this.state.letra;
-    respuestas.push(this.state.letra);
+  busquedaHistoria = (r) => {
+    let id = this.state.i + 1 + r;
+    console.log("la letra" + r);
+    console.log("buscando id" + " " + id);
+    let find = data.find((e) => e.id === id);
+    this.setState({ dato: find, i: this.state.i + 1 });
+    console.log(find);
   };
+
   render() {
+    // console.log(
+    //   "Llegando al render " +
+    //     this.state.dato.id +
+    //     " y la historia es " +
+    //     this.state.dato.historia +
+    //     " "
+    // );
     console.log(this.state.dato);
     // return this.state.respuestas.length=1?
-    return this.state.count < 8 ? (
+    return this.state.i < 6 ? (
       <div className="layout">
-        <Historia historia={this.state.historia} />
+        <Historia historia={this.state.dato.historia} />
         <div className="opciones">
           <Opciones
             handleAnswerA={this.handleAnswerA}
             handleAnswerB={this.handleAnswerB}
-            opcionA={this.state.opcionA}
-            opcionB={this.state.opcionB}
+            opcionA={this.state.dato.opciones.a}
+            opcionB={this.state.dato.opciones.b}
           />
         </div>
         <div className="recordatorio">
           <Respuestas list={respuestas} letra={this.state.letra} />
         </div>
 
-        <h1 className="historia">{this.state.i}</h1>
+        {/* <h1 className="historia">{this.state.i}</h1> */}
       </div>
     ) : (
-      alert("Bye bye")
+      alert("Fin")
     );
   }
 }
